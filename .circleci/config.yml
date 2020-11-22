@@ -1,7 +1,14 @@
 version: 2.1
-orbs:
-  node: circleci/node@3.0.0
+jobs:
+  build:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run: npm i
+      - run: npm run lint 
+
 workflows:
-  node-tests:
+  my_workflow:
     jobs:
-      - node/test
+      - build
