@@ -1,32 +1,51 @@
 version: 2.1
+# List of our jobs
 jobs:
+  # JOB to build our application.
   build:
+    # install docker
     docker:
       - image: circleci/node:13.8.0
     steps:
+      # checkout our code
       - checkout
+      # install npm
       - run: npm i
+      # run npm command lint
       - run: npm run lint 
-  
+  # JOB to test our application
   test:
+    # install docker
     docker:
       - image: circleci/node:13.8.0
     steps:
+      # checkout the code
       - checkout
+      # install npm
       - run: npm i
+      # run npm command to test application
       - run: npm run test
-
+  # JOB to analyze our application don't need install
   analyze:
+    # install docker
     docker:
       - image: circleci/node:13.8.0
     steps:
+      # checkout the code
       - checkout
+      # run npm command to audit applications
       - run: npm audit
 
 workflows:
   my_workflow:
     jobs:
+      # run job bild
       - build
+      # run job test after build
       - test:
           requires:
             - build
+      # run job analyze after test
+      - analyze:
+          requires:
+            - test
